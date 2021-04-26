@@ -41,10 +41,13 @@ const io = socket(server, {
 
 io.on("connection", socket => {
     console.log('socket id: ' + socket.id);
+    console.log("nice to meet you (shake hand)");
     
-    socket.on("event_from_client", data => {
+    socket.on("welcome_message", (data) => {
         // send a message with "data" to ALL clients EXCEPT for the one that emitted the
     	//     "event_from_client" event
-        socket.broadcast.emit("event_to_all_other_clients", data);
+        console.log("welcome_message");
+        console.log(data);
+        socket.emit("message", data);
     });
 });
