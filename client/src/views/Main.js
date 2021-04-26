@@ -19,7 +19,7 @@ useEffect(()=>{
         console.log(socket.id);
     });
 
-    socket.emit("welcome_message");
+    socket.emit("welcome_message", "This is the message!");
 
     return ()=> socket.disconnected(true);
 },[]);
