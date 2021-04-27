@@ -14,15 +14,11 @@ const Main = (props)=>{
 useEffect(()=>{
     console.log("Inside useEffect for Socket.io-client");
 
-    socket.on("connection", data =>{
+    socket.on("welcome_message", (data) =>{
         console.log(data);
-        console.log(socket.id);
-    });
+        })
 
-    socket.emit("welcome_message", "This is the message!");
-
-    return ()=> socket.disconnected(true);
-},[]);
+    },[]);
 
 
     return(

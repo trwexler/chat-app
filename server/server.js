@@ -42,12 +42,8 @@ const io = socket(server, {
 io.on("connection", socket => {
     console.log('socket id: ' + socket.id);
     console.log("nice to meet you (shake hand)");
+    socket.emit("welcome_message", "Hello");
     
-    socket.on("welcome_message", (data) => {
-        // send a message with "data" to ALL clients EXCEPT for the one that emitted the
-    	//     "event_from_client" event
-        console.log("welcome_message");
-        console.log(data);
-        socket.emit("message", data);
-    });
 });
+
+
