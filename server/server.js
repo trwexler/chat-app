@@ -10,8 +10,8 @@ app.use(express.urlencoded({extended:true}));
 app.use(cors());
 
 
-// require('./config/mongoose.config');
-// require('./routes/chat.routes')(app);
+require('./config/mongoose.config');
+require('./routes/chat.routes')(app);
 
  
 
@@ -19,15 +19,9 @@ const server = app.listen(port, () => {
     console.log(`Listening on port: ${port}`)
 });
 
- 
 
 
-// to initialize the socket, we need to invoke a new instance
-//     of socket.io and pass it our express server instance
-// We must also include a configuration settings object to prevent CORS errors
-// to initialize the socket, we need to invoke a new instance
-//     of socket.io and pass it our express server instance
-// We must also include a configuration settings object to prevent CORS errors
+
 const io = socket(server, {
     cors: {
         accessControlAllowOrigin: 'http://localhost:3000',
@@ -36,13 +30,16 @@ const io = socket(server, {
         credentials: true,
     }
 });
-//need to start listening for someone to try to connect to socket
-// on this server
 
 io.on("connection", socket => {
     console.log('socket id: ' + socket.id);
     console.log("nice to meet you (shake hand)");
+    
     socket.emit("welcome_message", "Hello");
+
+    socket.emit('new_message', (data)=>{
+        console.log('message:' + data);
+    } )
     
 });
 

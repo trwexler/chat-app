@@ -11,3 +11,36 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer utilities {
+  .newMessage {
+    color:red;
+    width:auto;
+    height: auto;
+    border:1px solid black;
+    margin:10px;
+    border-radius: 10px;
+    word-wrap:break-word;
+    padding:5px;
+  }
+  .newMessage:nth-child(even){
+    background-color:#CCCCCC;
+    margin-left:50%;
+  }
+  .newMessage:nth-child(odd){
+    background-color:white;
+    margin-right:50%;
+  }
+
+
+}
+
+
