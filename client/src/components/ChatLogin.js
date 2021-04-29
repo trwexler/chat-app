@@ -9,10 +9,11 @@ import io from 'socket.io-client';
 
 const ChatLogin = (props)=>{
 
-    const {socket} = props;
+    const {socket, currentUser, setCurrentUser} = props;
 
     const [userBase, setUserBase] = useState({
-        userName:""
+        userName:"",
+
     });
 
     //? Will need to grab whole db either now or in ChatWindow
@@ -42,11 +43,26 @@ const ChatLogin = (props)=>{
             .then((response)=>{
                 console.log(response.data);
                 setUserBase(response.data);
-                navigate("/chat/");
+                setCurrentUser({
+                    userName:response.data.userName,
+                    id:response.data._id
+                });
+                // console.log(userBase[userBase.length-1]);
+                console.log(currentUser);
+                console.log(response.data._id);
+                console.log(response.data.userName);
+
+                socket.emit('new_login', response.data.userName);
+
+
+                navigate("/chat/"+response.data._id);
             })
             .catch((err)=>{
                 console.log(err);
-            })    
+            })   
+            
+            
+
     }
 
     return(
@@ -65,11 +81,6 @@ const ChatLogin = (props)=>{
                 />
                 <button>Click</button>
 
-            {/* {
-                userBase.map((oneUser)=>(
-                    <p key={oneUser._id}>Current user: {oneUser.userName}</p>
-                ))
-            } */}
 
             </form>
                     

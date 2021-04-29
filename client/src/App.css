@@ -36,3 +36,21 @@
     transform: rotate(360deg);
   }
 }
+
+
+/* #loginPopup {
+  -webkit-animation: cssAnimation 2s forwards; 
+  animation: cssAnimation 2s forwards;
+}
+
+@keyframes cssAnimation {
+  0%   {opacity: .5;}
+  50%  {opacity: 1;}
+  100% {opacity: 0;}
+}
+
+@-webkit-keyframes cssAnimation {
+  0%   {opacity: .5;}
+  50%  {opacity: 1;}
+  100% {opacity: 0;}
+} */

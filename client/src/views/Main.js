@@ -13,6 +13,11 @@ const Main = (props)=>{
 
     const [userBase, setUserBase] = useState([]);
 
+    const [currentUser, setCurrentUser]=useState({
+        userName:"",
+        id:""
+    });
+
     useEffect(()=>{
         axios.get('http://localhost:8000/api')
             .then((response)=>{
@@ -24,29 +29,16 @@ const Main = (props)=>{
             })
     },[])
 
-
-
-
     const [socket] = useState( () => io( ":8000" ) );
-
-    // useEffect(()=>{
-    //     console.log("Inside useEffect for Socket.io-client");
-
-    //     socket.on("welcome_message", (data) =>{
-    //         console.log(data);
-    //         })
-
-    //     },[]);
-
-    
 
 
     return(
         <div>
             <h1>Mern Chat</h1>
+          
             <Router>
-                <ChatLogin default/>
-                <ChatWindow userBase={userBase} setUserBase={setUserBase} socket={socket} path="/chat/"/>
+                <ChatLogin socket={socket} currentUser={currentUser} setCurrentUser={setCurrentUser} default/>
+                <ChatWindow currentUser={currentUser} setCurrentUser={setCurrentUser} userBase={userBase} setUserBase={setUserBase} socket={socket} path="/chat/:id"/>
             </Router>
            
 

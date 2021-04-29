@@ -24,12 +24,14 @@ const server = app.listen(port, () => {
 
 const io = socket(server, {
     cors: {
-        accessControlAllowOrigin: 'http://localhost:3000',
+        origin: '*',
         methods: ['GET', 'POST'],
         allowedHeaders: ['*'],
         credentials: true,
     }
 });
+
+
 
 io.on("connection", socket => {
     console.log('socket id: ' + socket.id);
@@ -37,10 +39,24 @@ io.on("connection", socket => {
     
     socket.emit("welcome_message", "Hello");
 
-    socket.emit('new_message', (data)=>{
-        console.log('message:' + data);
-    } )
-    
+    socket.on('new_message', (data)=>{
+        console.log(data);
+        console.log(socket.id);
+        data.socket_id = socket.id;     //data.socket_id is a key we are adding to the data obj being passed in.
+        io.emit('new_message_sent', data);
+
+    //client to server can only speak to each other. no communication between like queries.
+   
+    });    
+
+    socket.on("new_login", (data)=>{
+        console.log("new_login");
+        console.log("server-line: 54", data);
+
+
+        socket.broadcast.emit('new_login_shown', data);
+    });
+
 });
 
 

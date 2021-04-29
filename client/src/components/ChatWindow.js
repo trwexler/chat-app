@@ -9,7 +9,7 @@ import io from 'socket.io-client';
 
 const ChatWindow = (props)=>{
 
-    const {userBase, setUserBase, socket} = props;
+    const {currentUser, setCurrentUser, userBase, setUserBase, socket} = props;
     
 
     // const [allMessages, setAllMessages]= useState([])
@@ -19,46 +19,82 @@ const ChatWindow = (props)=>{
 
 
     const inputHandler = (e)=>{
+
         setMessages(e.target.value);
 
         console.log(messages);
     }
 
-    // useEffect(()=>{
+
     //     console.log("Inside useEffect for Socket.io-client");
 
-    //     socket.on("new_message", (data) =>{
-    //         socket.emit('new_message', ()=>{
-    //             document.getElementById('messageHolder').appendChild(newMsg)
-    //         })
-    //         })
 
-    //     },[]);
+    useEffect(()=>{
+        socket.on("new_login_shown", (data)=>{
+            document.getElementById('loginPopup').classList.add("animate-cssAnimation");
+           document.getElementById('loginPopup').innerHTML = data + " has entered the chat!";
+        });
+    },[]);
 
+    useEffect(()=>{
+
+        socket.on("new_message_sent", (data) =>{
+
+            console.log("new_message_sent");
+            console.log(data);
+            console.log(socket.id);
+
+            let newMsg = document.createElement("p");
+
+            if(socket.id === data.socket_id){
+                newMsg.classList.add("sentMessage");
+            }
+            else{
+                newMsg.classList.add("receivedMessage");
+            }
+
+            newMsg.innerHTML = data.userName + " says: " + data.message;
+        
+            document.getElementById('messageHolder').appendChild(newMsg);
+
+        }) 
+
+    }, []);
 
 
     const handleSubmit = (e)=>{
+
         e.preventDefault();
-        let newMsg = document.createElement("p");
-        newMsg.innerHTML = document.getElementById('chatInput').value;
-        newMsg.classList.add("newMessage");
-        document.getElementById('messageHolder').appendChild(newMsg);
+
+        let chatInput = document.getElementById('chatInput').value;
+
+        socket.emit('new_message', {
+            userName:currentUser.userName,
+            message:chatInput
+        });
+
+        document.getElementById('chatInput').value = '';
         
-    
     }
 
+    //.on listening .emit is sending client-to-server server-to-client
 
 
 
     return(
+
         <div className="h-screen">
 
             <h2>Your Chatroom</h2>
 
            <form id="formId" onSubmit={handleSubmit}
-           className=" h-3/4 w-3/4 mx-auto border flex flex-col justify-end items-center">
+           className=" h-3/4 w-3/4 mx-auto border flex flex-col justify-end items-center relative">
 
-                <div id="messageHolder" className="overflow-y-scroll w-full"></div>
+                <div id="loginPopup" className="absolute top-7 right-10"></div>
+
+
+                <div id="messageHolder" className="overflow-y-auto w-full"></div>
+                
 
 
                 <div className="w-full border-t-2 py-2">
